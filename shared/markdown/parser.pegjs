@@ -124,11 +124,10 @@ Mention = MentionMarker children:([a-zA-Z0-9]+"_"?)+ & {
 
 // children test adapted from validateTopicName in chat/msgchecker/plaintext_checker.go.
 Channel
- = ChannelMarker children:([0-9a-zA-Z_-]+) & {
-  const channel = flatten(children)[0]
+ = ChannelMarker channel:($ ([0-9a-zA-Z_-]+)) & {
   return channel.length > 0 && channel.length <= 20 &&
     options && options.channelNameToConvID && options.channelNameToConvID(channel)
-} { return {type: 'channel', children: flatten(children), convID: options && options.channelNameToConvID && options.channelNameToConvID(flatten(children)[0]) } }
+} { return {type: 'channel', children: [channel], convID: options && options.channelNameToConvID && options.channelNameToConvID(channel) } }
 
 CodeBlock
  = Ticks3 LineTerminatorSequence? children:(!Ticks3 .)+ Ticks3 { return {type: 'code-block', children: flatten(children)} }
